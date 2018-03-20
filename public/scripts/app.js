@@ -73,15 +73,15 @@ var template = React.createElement(
     )
   )
 );
-
-var appRoot = document.getElementById('app');
 //  create a templateTwo var in JSX
 var onRemoveAll = function onRemoveAll() {
   app.options = [];
   render();
 };
 
-ReactDOM.render(template, appRoot);
+var appRoot = document.getElementById('app');
+
+var numbers = [55, 101, 2000];
 
 var render = function render() {
   var template = React.createElement(
@@ -115,21 +115,14 @@ var render = function render() {
     React.createElement(
       'ol',
       null,
-      React.createElement(
-        'li',
-        null,
-        'Item one'
-      ),
-      React.createElement(
-        'li',
-        null,
-        'Item two'
-      ),
-      React.createElement(
-        'li',
-        null,
-        'Item three'
-      )
+      app.options.map(function (option) {
+        return React.createElement(
+          'li',
+          { key: option },
+          ' ',
+          option
+        );
+      })
     ),
     React.createElement(
       'form',
@@ -144,5 +137,7 @@ var render = function render() {
   );
   ReactDOM.render(template, appRoot);
 };
+
+ReactDOM.render(template, appRoot);
 
 render();

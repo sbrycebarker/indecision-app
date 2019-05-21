@@ -1,83 +1,100 @@
-console.log('app.js is running')
-//  JSX - JavaScript XML
-const app = {
-  title: 'Indecision App',
-  subtitle: 'I WILL DECIDE FOR YOU',
-  options: []
-}
+class IndecisionApp extends React.Component {
+  render(){
+    const title = 'Indecision';
+    const subtitle = 'Put your life in the hands of a computer!';
+    const options = ['Option one', 'Option two', 'Option four']
 
-const onFormSubmit = (e) => {
-  e.preventDefault();
-
-  const option = e.target.elements.option.value;
-
-  if (option) {
-    app.options.push(option);
-    e.target.elements.option.value = '';
-    render()
+    return (
+      <div>
+        <Header title={title} subtitle={subtitle}/>
+        <Action />
+        <Options options={options}/>
+        <AddOption />
+      </div>
+    );
   }
-};
-
-const template = (
-  <div>
-  <h1>{app.title}</h1>
-    {app.subtitle && <p>{app.subtitle}</p>}
-    <p>{app.options.length > 0 ? 'Here are your options' + ' ' + app.options : 'No options'}</p>
-    <p>{app.options.length}</p>
-    <ol>
-      <li>Item one</li>
-      <li>Item two</li>
-      <li>Item three</li>
-    </ol>
-    <form onSubmit={onFormSubmit}>
-      <input type="text" name="option"/>
-      <button>Add Option</button>
-    </form>
-  </div>
-);
-//  create a templateTwo var in JSX
-const onRemoveAll = () => {
-  app.options = [];
-  render();
 }
-const onMakeDecision = () => {
-  const randomNum = Math.floor(Math.random() * app.options.length);
-  const option = app.options[randomNum]
-  alert(option);
+
+class Header extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>{this.props.title}</h1>
+        <h2>{this.props.subtitle}</h2>
+      </div>
+    )
+  }
 }
-const appRoot = document.getElementById('app')
 
-const numbers = [55, 101, 2000];
+class Action extends React.Component {
+  handlePick() {
+    alert('handlePick')
+  }
+  render(){
+    return(
+      <div>
+        <button onClick={this.handlePick}>What should I do?</button>
+      </div>
+    )
+  }
+}
 
-const render = () => {
-  const template = (
-    <div>
-    <h1>{app.title}</h1>
-      {app.subtitle && <p>{app.subtitle}</p>}
-      <p>{app.options.length > 0 ? 'Here are your options' + ' ' + app.options : 'No options'}</p>
-      <button disabled={app.options.length === 0} onClick={onMakeDecision}>What should I do?</button>
-      <button onClick={onRemoveAll}>Remove All</button>
-      {
-        // numbers.map((number) => {
-        //   return <p key={number}>Number: {number}</p>
-        // })
-      }
-      <ol>
+// Options => goes here
+
+class Options extends React.Component {
+  handleRemoveAll() {
+    console.log(this.props.options);
+    // alert('Remove All');
+  }
+  render(){
+    return (
+      <div>
+        <button onClick={this.handleRemoveAll}>Remove All</button>
         {
-          app.options.map((option) => {
-            return <li key={option}> {option}</li>
-          })
+          this.props.options.map((option) => <Option key={option} optionText={option}/>)
         }
-      </ol>
-      <form onSubmit={onFormSubmit}>
-        <input type="text" name="option"/>
-        <button>Add Option</button>
-      </form>
-    </div>
-  );
-  ReactDOM.render(template, appRoot)
+      </div>
+    )
+  }
 }
 
-ReactDOM.render(template, appRoot)
+// Option => Option component here
 
-render()
+class Option extends React.Component {
+    render(){
+      return (
+        <div>
+          {this.props.optionText}
+        </div>
+      )
+    }
+}
+
+
+// Addoption => goes here
+
+class AddOption extends React.Component {
+  handleAddOption(e) {
+    e.preventDefault();
+
+    const option = e.target.elements.option.value.trim();
+
+    if (option) {
+      alert(option);
+    } else {
+      alert("NO OPTION")
+    }
+  }
+  render(){
+    return(
+      <div>
+        <form onSubmit={this.handleAddOption}>
+          <input type="text" name="option" placeholder="New Option" />
+          <button>Add</button>
+        </form>
+      </div>
+    )
+  }
+}
+
+ReactDOM.render(<IndecisionApp />, document.getElementById('app'))
